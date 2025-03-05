@@ -1,20 +1,36 @@
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import CreateComponent from './components/CreateComponent';
-import ReadComponent from './components/ReadComponent';
-import LoginComponent from './components/LoginComponent';
-
-import './App.css';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
+import Login from './components/Login';
+import Dashboard from './components/Dashboard';
+import CreatePost from './components/CreatePost';
+import EditPost from './components/EditPost';
+import ProtectedRoute from './components/ProtectedRoute';
 
 function App() {
   return (
     <Router>
-      <div className="App">
+      <div className="min-h-screen bg-gray-50">
         <Routes>
-        <Route path="/login" element={<LoginComponent />} />
-          <Route path="/create" element={<CreateComponent />} />
-          <Route path="/read" element={<ReadComponent />} />
-          <Route path="/" element={<LoginComponent />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/dashboard" element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/posts/create" element={
+            <ProtectedRoute>
+              <CreatePost />
+            </ProtectedRoute>
+          } />
+          <Route path="/posts/edit/:id" element={
+            <ProtectedRoute>
+              <EditPost />
+            </ProtectedRoute>
+          } />
         </Routes>
+        <Toaster position="bottom-right" />
       </div>
     </Router>
   );
